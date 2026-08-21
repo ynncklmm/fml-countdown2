@@ -50,7 +50,7 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
 
   
 /* =========================================================
-   FINAL COUNTDOWN — CINEMATIC MOVE TO CENTER
+   FINAL COUNTDOWN — SMOOTH MOVE
    ========================================================= */
 
 .content.final-countdown .logo,
@@ -60,46 +60,50 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
 .content.final-countdown .message,
 .content.final-countdown .chevrons{
   opacity:0;
-  transform:translateY(-8px);
   transition:
-    opacity:2.8s ease,
-    transform:2.8s ease;
+    opacity:3s ease,
+    transform:3s ease;
+}
+
+.content.final-countdown .logo{
+  transform:translateY(-20px);
+}
+
+.content.final-countdown .eyebrow{
+  transform:translateY(-15px);
+}
+
+.content.final-countdown h1{
+  transform:translateY(-10px);
+}
+
+.content.final-countdown .sub{
+  transform:translateY(-5px);
+}
+
+.content.final-countdown .message{
+  transform:translateY(-5px);
 }
 
 .content.final-countdown .timer{
-  position:fixed;
-  z-index:50;
-  left:50%;
-  top:var(--final-countdown-top);
-  width:min(920px,94vw);
-  margin:0;
-
-  transform:translateX(-50%) scale(1);
-
+  transform:translateY(-180px) scale(1.35);
+  transition:
+    transform:3s cubic-bezier(.16,1,.3,1),
+    border-color:3s ease,
+    background:3s ease,
+    box-shadow:3s ease;
+    
   border-color:rgba(200,162,74,.65);
   background:rgba(3,18,13,.35);
-
   box-shadow:
     0 25px 90px rgba(0,0,0,.45),
     0 0 70px rgba(200,162,74,.08);
-
-  transition:
-    top:2.8s cubic-bezier(.16,1,.3,1),
-    transform:2.8s cubic-bezier(.16,1,.3,1),
-    border-color:2.8s ease,
-    background:2.8s ease,
-    box-shadow:2.8s ease;
-}
-
-.content.final-countdown.centered .timer{
-  top:50%;
-  transform:translate(-50%,-50%) scale(1.35);
 }
 
 .content.final-countdown .timer .num{
   font-size:clamp(70px,11vw,140px);
   transition:
-    font-size:2.8s cubic-bezier(.16,1,.3,1);
+    font-size:3s cubic-bezier(.16,1,.3,1);
 }
 
 .content.final-countdown .timer .label,
@@ -111,11 +115,7 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
 @media(max-width:650px){
 
   .content.final-countdown .timer{
-    width:92vw;
-  }
-
-  .content.final-countdown.centered .timer{
-    transform:translate(-50%,-50%) scale(1.15);
+    transform:translateY(-120px) scale(1.15);
   }
 
   .content.final-countdown .timer .num{
@@ -797,42 +797,16 @@ function update(){
     const content =
         document.querySelector(".content");
 
-  if (
+ if (
     diff <= 12000 &&
     diff > 0 &&
     content &&
     !content.classList.contains("final-countdown")
 ){
 
-    const timer =
-        document.getElementById("timer");
-
-    if (timer){
-
-        const rect =
-            timer.getBoundingClientRect();
-
-        content.style.setProperty(
-            "--final-countdown-top",
-            rect.top + "px"
-        );
-
-        content.classList.add("final-countdown");
-
-        requestAnimationFrame(() => {
-
-            requestAnimationFrame(() => {
-
-                content.classList.add("centered");
-
-            });
-
-        });
-
-    }
+    content.classList.add("final-countdown");
 
 }
-
     /*
      * Start the anthem at T-20 seconds.
      */
