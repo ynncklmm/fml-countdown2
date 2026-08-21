@@ -825,68 +825,74 @@ function update(){
         target - Date.now();
 
     /*
-     * Enter the final 10-second countdown.
+     * Enter the final 12-second countdown.
      */
     const content =
         document.querySelector(".content");
 
-if (
-    diff <= 12000 &&
-    diff > 0 &&
-    content &&
-    !content.classList.contains("final-countdown")
-){
+    if (
+        diff <= 12000 &&
+        diff > 0 &&
+        content &&
+        !content.classList.contains("final-countdown")
+    ){
 
-    const timer =
-        document.getElementById("timer");
+        const timer =
+            document.getElementById("timer");
 
-    if (timer){
+        if (timer){
 
-        const rect =
-            timer.getBoundingClientRect();
+            const rect =
+                timer.getBoundingClientRect();
 
-        const clone =
-            timer.cloneNode(true);
+            const clone =
+                timer.cloneNode(true);
 
-        clone.classList.add(
-            "final-countdown-clone"
-        );
+            clone.classList.add(
+                "final-countdown-clone"
+            );
 
-        clone.removeAttribute("id");
+            clone.removeAttribute("id");
 
-        clone.style.left =
-            rect.left + "px";
+            clone.querySelectorAll("[id]")
+                .forEach(el =>
+                    el.removeAttribute("id")
+                );
 
-        clone.style.top =
-            rect.top + "px";
+            clone.style.left =
+                rect.left + "px";
 
-        const targetX =
-            window.innerWidth / 2 -
-            (rect.left + rect.width / 2);
+            clone.style.top =
+                rect.top + "px";
 
-        const targetY =
-            window.innerHeight / 2 -
-            (rect.top + rect.height / 2);
+            const targetX =
+                window.innerWidth / 2 -
+                (rect.left + rect.width / 2);
 
-        clone.style.setProperty(
-            "--move-x",
-            targetX + "px"
-        );
+            const targetY =
+                window.innerHeight / 2 -
+                (rect.top + rect.height / 2);
 
-        clone.style.setProperty(
-            "--move-y",
-            targetY + "px"
-        );
+            clone.style.setProperty(
+                "--move-x",
+                targetX + "px"
+            );
 
-        document.body.appendChild(clone);
+            clone.style.setProperty(
+                "--move-y",
+                targetY + "px"
+            );
 
-        content.classList.add(
-            "final-countdown"
-        );
+            document.body.appendChild(clone);
+
+            content.classList.add(
+                "final-countdown"
+            );
+
+        }
 
     }
 
-}
     /*
      * Start the anthem at T-20 seconds.
      */
@@ -927,6 +933,9 @@ if (
     const s =
         total % 60;
 
+    /*
+     * Update original countdown.
+     */
     document.getElementById("days")
         .textContent = pad(d);
 
@@ -938,8 +947,32 @@ if (
 
     document.getElementById("seconds")
         .textContent = pad(s);
-}
 
+    /*
+     * Update cinematic countdown clone.
+     */
+    const clone =
+        document.querySelector(
+            ".final-countdown-clone"
+        );
+
+    if (clone){
+
+        const cloneNumbers =
+            clone.querySelectorAll(".num");
+
+        if (cloneNumbers.length >= 4){
+
+            cloneNumbers[0].textContent = pad(d);
+            cloneNumbers[1].textContent = pad(h);
+            cloneNumbers[2].textContent = pad(m);
+            cloneNumbers[3].textContent = pad(s);
+
+        }
+
+    }
+
+}
 /* =========================================================
    FULLSCREEN
    ========================================================= */
