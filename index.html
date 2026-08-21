@@ -103,12 +103,30 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
   opacity:.7;
 }
 
+/*
+ * Fade the centered countdown away
+ * when the main reveal begins.
+ */
+.final-countdown-clone.fade-out{
+  opacity:0;
+
+  transform:
+    translate(
+      var(--move-x),
+      var(--move-y)
+    )
+    scale(1.35);
+
+  transition:opacity 1.2s ease;
+}
+
 @keyframes finalCountdownCenter{
 
   0%{
     transform:
       translate(0,0)
       scale(1);
+    opacity:1;
   }
 
   100%{
@@ -118,14 +136,15 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
         var(--move-y)
       )
       scale(1.35);
+    opacity:1;
   }
 
 }
 
 .content.final-countdown{
   /*
-   * Fade everything in the original content
-   * except the actual countdown.
+   * Fade the original page elements
+   * while the cinematic countdown moves.
    */
 }
 
@@ -137,6 +156,7 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
 .content.final-countdown .message,
 .content.final-countdown .chevrons{
   opacity:0;
+
   transition:
     opacity:4s ease;
 }
@@ -156,10 +176,10 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
   }
 
 }
-   
+
 /* =========================================================
-CINEMATIC LAUNCH REVEAL
-========================================================= */
+   CINEMATIC LAUNCH REVEAL
+   ========================================================= */
 
 .launch-overlay{
   position:fixed;
@@ -773,6 +793,27 @@ function showLive(){
     if (launched) return;
 
     launched = true;
+
+       /*
+     * Fade out the cinematic countdown clone
+     * before the final reveal begins.
+     */
+    const countdownClone =
+        document.querySelector(
+            ".final-countdown-clone"
+        );
+
+    if (countdownClone){
+
+        countdownClone.classList.add("fade-out");
+
+        setTimeout(() => {
+
+            countdownClone.remove();
+
+        }, 1300);
+
+    }
 
     /*
      * Hide countdown elements gradually.
