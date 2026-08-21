@@ -781,25 +781,20 @@ function update(){
     const diff =
         target - Date.now();
 
-function update(){
-
-    const diff =
-        target - Date.now();
-
     /*
-     * Enter the final 20-second countdown.
+     * Enter the final 10-second countdown.
      */
+    const content =
+        document.querySelector(".content");
+
     if (
         diff <= 10000 &&
         diff > 0 &&
-        !document
-            .querySelector(".content")
-            .classList.contains("final-countdown")
+        content &&
+        !content.classList.contains("final-countdown")
     ){
 
-        document
-            .querySelector(".content")
-            .classList.add("final-countdown");
+        content.classList.add("final-countdown");
 
     }
 
@@ -812,7 +807,9 @@ function update(){
         audioReady &&
         !audioStarted
     ){
+
         playLaunchAudio();
+
     }
 
     /*
@@ -823,30 +820,7 @@ function update(){
         showLive();
 
         return;
-    }
 
-    // ...
-   
-    /*
-     * Start the anthem at T-10 seconds.
-     */
-    if (
-    diff <= 20000 &&
-    diff > 0 &&
-    audioReady &&
-    !audioStarted
-){
-    playLaunchAudio();
-}
-
-    /*
-     * Countdown finished.
-     */
-    if (diff <= 0){
-
-        showLive();
-
-        return;
     }
 
     const total =
