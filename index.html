@@ -49,6 +49,72 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
 }
    
 /* =========================================================
+   FINAL 10 SECOND COUNTDOWN
+   ========================================================= */
+
+.content{
+  transition:opacity 2.2s ease;
+}
+
+.content.final-countdown{
+  position:relative;
+}
+
+.content.final-countdown .logo,
+.content.final-countdown .eyebrow,
+.content.final-countdown h1,
+.content.final-countdown .sub,
+.content.final-countdown .message,
+.content.final-countdown .chevrons{
+  opacity:0;
+  transition:opacity 1.4s ease;
+}
+
+.content.final-countdown .timer{
+  position:fixed;
+  z-index:20;
+  left:50%;
+  top:50%;
+  width:min(920px,96vw);
+  margin:0;
+  transform:translate(-50%,-50%) scale(1.35);
+  transition:
+    transform 1.6s cubic-bezier(.16,1,.3,1),
+    opacity 1.4s ease,
+    border-color 1.4s ease,
+    background 1.4s ease,
+    box-shadow 1.4s ease;
+}
+
+.content.final-countdown .timer{
+  border-color:rgba(200,162,74,.65);
+  background:rgba(3,18,13,.35);
+  box-shadow:
+    0 25px 90px rgba(0,0,0,.45),
+    0 0 70px rgba(200,162,74,.08);
+}
+
+.content.final-countdown .timer .num{
+  font-size:clamp(70px,11vw,140px);
+}
+
+.content.final-countdown .timer .label,
+.content.final-countdown .timer .colon{
+  opacity:.8;
+}
+
+@media(max-width:650px){
+  .content.final-countdown .timer{
+    width:92vw;
+    transform:translate(-50%,-50%) scale(1.15);
+  }
+
+  .content.final-countdown .timer .num{
+    font-size:clamp(52px,16vw,90px);
+  }
+}
+   
+/* =========================================================
 CINEMATIC LAUNCH REVEAL
 ========================================================= */
 
@@ -715,6 +781,52 @@ function update(){
     const diff =
         target - Date.now();
 
+function update(){
+
+    const diff =
+        target - Date.now();
+
+    /*
+     * Enter the final 20-second countdown.
+     */
+    if (
+        diff <= 10000 &&
+        diff > 0 &&
+        !document
+            .querySelector(".content")
+            .classList.contains("final-countdown")
+    ){
+
+        document
+            .querySelector(".content")
+            .classList.add("final-countdown");
+
+    }
+
+    /*
+     * Start the anthem at T-20 seconds.
+     */
+    if (
+        diff <= 20000 &&
+        diff > 0 &&
+        audioReady &&
+        !audioStarted
+    ){
+        playLaunchAudio();
+    }
+
+    /*
+     * Countdown finished.
+     */
+    if (diff <= 0){
+
+        showLive();
+
+        return;
+    }
+
+    // ...
+   
     /*
      * Start the anthem at T-10 seconds.
      */
