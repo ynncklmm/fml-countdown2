@@ -48,65 +48,7 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
   opacity:0;
 }
 
-/* =========================================================
-   FINAL COUNTDOWN — CINEMATIC MOVE TO CENTER
-   ========================================================= */
-
-.content.final-countdown{
-  animation:finalCountdownMove 2s cubic-bezier(.22,.8,.28,1) forwards;
-}
-
-.content.final-countdown .logo,
-.content.final-countdown .eyebrow,
-.content.final-countdown h1,
-.content.final-countdown .sub,
-.content.final-countdown .timer,
-.content.final-countdown .message{
-  transition:
-    opacity 2s ease,
-    transform 2s cubic-bezier(.22,.8,.28,1);
-}
-
-.content.final-countdown .logo,
-.content.final-countdown .eyebrow,
-.content.final-countdown h1,
-.content.final-countdown .sub,
-.content.final-countdown .message{
-  opacity:0;
-}
-
-.content.final-countdown .timer{
-  position:relative;
-  z-index:50;
-  width:min(920px,94vw);
-  margin:38px auto 24px;
-
-  transform:translateY(-35vh) scale(1.35);
-
-  border-color:rgba(200,162,74,.65);
-  background:rgba(3,18,13,.35);
-
-  box-shadow:
-    0 25px 90px rgba(0,0,0,.45),
-    0 0 70px rgba(200,162,74,.08);
-
-  transition:
-    transform 3.5s cubic-bezier(.16,1,.3,1),
-    border-color 3s ease,
-    background 3s ease,
-    box-shadow 3s ease;
-}
-
-@keyframes finalCountdownMove{
-  0%{
-    transform:translate(0,0) scale(1);
-  }
-
-  100%{
-    transform:translate(0,0) scale(1);
-  }
-}
-   
+  
 /* =========================================================
    FINAL COUNTDOWN — CINEMATIC MOVE TO CENTER
    ========================================================= */
@@ -120,18 +62,19 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
   opacity:0;
   transform:translateY(-8px);
   transition:
-    opacity 2.8s ease,
-    transform 2.8s ease;
+    opacity:2.8s ease,
+    transform:2.8s ease;
 }
 
 .content.final-countdown .timer{
   position:fixed;
   z-index:50;
   left:50%;
-  top:50%;
+  top:var(--final-countdown-top);
   width:min(920px,94vw);
   margin:0;
-  transform:translate(-50%,-50%) scale(1.35);
+
+  transform:translateX(-50%) scale(1);
 
   border-color:rgba(200,162,74,.65);
   background:rgba(3,18,13,.35);
@@ -141,28 +84,37 @@ h1{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2
     0 0 70px rgba(200,162,74,.08);
 
   transition:
-    transform 3.5s cubic-bezier(.16,1,.3,1),
-    border-color 3s ease,
-    background 3s ease,
-    box-shadow 3s ease;
+    top:2.8s cubic-bezier(.16,1,.3,1),
+    transform:2.8s cubic-bezier(.16,1,.3,1),
+    border-color:2.8s ease,
+    background:2.8s ease,
+    box-shadow:2.8s ease;
+}
+
+.content.final-countdown.centered .timer{
+  top:50%;
+  transform:translate(-50%,-50%) scale(1.35);
 }
 
 .content.final-countdown .timer .num{
   font-size:clamp(70px,11vw,140px);
   transition:
-    font-size 3.5s cubic-bezier(.16,1,.3,1);
+    font-size:2.8s cubic-bezier(.16,1,.3,1);
 }
 
 .content.final-countdown .timer .label,
 .content.final-countdown .timer .colon{
   opacity:.8;
-  transition:opacity 2.5s ease;
+  transition:opacity:2.5s ease;
 }
 
 @media(max-width:650px){
 
   .content.final-countdown .timer{
     width:92vw;
+  }
+
+  .content.final-countdown.centered .timer{
     transform:translate(-50%,-50%) scale(1.15);
   }
 
@@ -845,16 +797,41 @@ function update(){
     const content =
         document.querySelector(".content");
 
-   if (
-       diff <= 12000 &&
-       diff > 0 &&
-       content &&
-       !content.classList.contains("final-countdown")
-   ){
-   
-       content.classList.add("final-countdown");
-   
-   }
+  if (
+    diff <= 12000 &&
+    diff > 0 &&
+    content &&
+    !content.classList.contains("final-countdown")
+){
+
+    const timer =
+        document.getElementById("timer");
+
+    if (timer){
+
+        const rect =
+            timer.getBoundingClientRect();
+
+        content.style.setProperty(
+            "--final-countdown-top",
+            rect.top + "px"
+        );
+
+        content.classList.add("final-countdown");
+
+        requestAnimationFrame(() => {
+
+            requestAnimationFrame(() => {
+
+                content.classList.add("centered");
+
+            });
+
+        });
+
+    }
+
+}
 
     /*
      * Start the anthem at T-20 seconds.
